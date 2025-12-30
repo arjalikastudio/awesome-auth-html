@@ -1,0 +1,111 @@
+ /* ================= SNOW ================= */
+        .snow {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, .6) 50%, transparent 60%),
+                radial-gradient(1.5px 1.5px at 70% 60%, rgba(255, 255, 255, .4) 50%, transparent 60%),
+                radial-gradient(1px 1px at 40% 80%, rgba(255, 255, 255, .3) 50%, transparent 60%);
+            animation: snowFall 18s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes snowFall {
+            from {
+                background-position: 0 -200px;
+            }
+
+            to {
+                background-position: 0 800px;
+            }
+        }
+
+        /* ================= FROST DISTORTION ================= */
+        .frost-reactive {
+            position: relative;
+            transition: filter .2s ease, transform .2s ease;
+        }
+
+        .frost-reactive::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background:
+                radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+                    rgba(255, 255, 255, 0.35),
+                    transparent 60%);
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+
+        /* ================= ICE CRACK (NO CROSS) ================= */
+        .crack {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background-image:
+                repeating-linear-gradient(160deg,
+                    transparent 0%,
+                    transparent 46%,
+                    rgba(255, 255, 255, .55) 47%,
+                    transparent 49%);
+            opacity: 0;
+            transition: opacity .4s ease;
+            pointer-events: none;
+        }
+
+        .frost-reactive:hover .crack {
+            opacity: .25;
+        }
+
+
+        /* ================= PARTICLES ================= */
+        canvas {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ================= SCREENS ================= */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: cinematicIn .7s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        @keyframes cinematicIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(.96);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* ================= LOADING ================= */
+        .loading::after {
+            content: "";
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255, 255, 255, .8);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }

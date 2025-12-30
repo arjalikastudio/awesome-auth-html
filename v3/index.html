@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Winter Auth — Hyper Realistic</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    boxShadow: {
+                        glow: '0 0 40px rgba(255,200,120,0.25)',
+                        frost: 'inset 0 0 40px rgba(255,255,255,0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+ 
+</head>
+
+<body class="relative min-h-screen overflow-hidden flex items-center justify-center
+bg-gradient-to-br from-[#0a1020] via-[#020617] to-black text-white">
+
+    <!-- Snow -->
+    <div class="snow"></div>
+
+    <!-- Frost Light -->
+    <div class="absolute -top-32 -left-32 w-[500px] h-[500px] bg-blue-500/20 blur-[140px]"></div>
+    <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-amber-400/20 blur-[140px]"></div>
+
+    <!-- Card -->
+    <div class="relative z-10 w-full max-w-md
+bg-gradient-to-br from-white/20 to-white/5
+backdrop-blur-2xl rounded-3xl p-8
+border border-white/20 shadow-2xl shadow-black/70">
+
+        <!-- LOGO / TITLE -->
+        <h1 class="text-center text-2xl font-semibold tracking-wide mb-6">
+            ❄️ Winter Access
+        </h1>
+
+        <!-- LOGIN -->
+        <div id="login" class="screen active">
+            <input type="email" placeholder="Email" class="w-full mb-4 px-4 py-3 rounded-xl
+bg-black/30 border border-white/10
+focus:border-amber-300/50 outline-none transition" />
+
+            <input id="loginPassword" type="password" placeholder="Password" class="w-full mb-3 px-4 py-3 rounded-xl
+bg-black/30 border border-white/10
+focus:border-amber-300/50 outline-none transition" />
+
+            <div class="h-1.5 w-full bg-white/10 rounded mb-5 overflow-hidden">
+                <div id="strengthFill" class="h-full w-0 transition-all"></div>
+            </div>
+
+            <button onclick="submit(this,'✓ Welcome Back')" class="w-full py-3 rounded-xl font-semibold
+bg-gradient-to-r from-amber-300 to-orange-400
+text-black shadow-glow hover:scale-[1.03] transition">
+                Enter the Winter
+            </button>
+
+            <div class="flex justify-between text-xs mt-4 opacity-70">
+                <span onclick="show('forgot')" class="cursor-pointer hover:opacity-100">Forgot?</span>
+                <span onclick="show('register')" class="cursor-pointer hover:opacity-100">Create Account</span>
+            </div>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="register" class="screen">
+            <input placeholder="Name"
+                class="w-full mb-4 px-4 py-3 rounded-xl bg-black/30 border border-white/10 outline-none" />
+
+            <input placeholder="Email"
+                class="w-full mb-4 px-4 py-3 rounded-xl bg-black/30 border border-white/10 outline-none" />
+
+            <input id="registerPassword" type="password" placeholder="Password"
+                class="w-full mb-3 px-4 py-3 rounded-xl bg-black/30 border border-white/10 outline-none" />
+
+            <div class="h-1.5 w-full bg-white/10 rounded mb-5 overflow-hidden">
+                <div id="registerStrength" class="h-full w-0 transition-all"></div>
+            </div>
+
+            <button onclick="submit(this,'✓ Account Forged')" class="w-full py-3 rounded-xl font-semibold
+bg-gradient-to-r from-emerald-300 to-cyan-300
+text-black shadow-glow hover:scale-[1.03] transition">
+                Forge Account
+            </button>
+
+            <p onclick="show('login')" class="text-center text-xs mt-4 opacity-70 cursor-pointer">
+                Back to Login
+            </p>
+        </div>
+
+        <!-- FORGOT -->
+        <div id="forgot" class="screen">
+            <input placeholder="Email"
+                class="w-full mb-5 px-4 py-3 rounded-xl bg-black/30 border border-white/10 outline-none" />
+
+            <button onclick="submit(this,'✓ Spell Sent')" class="w-full py-3 rounded-xl font-semibold
+bg-gradient-to-r from-indigo-300 to-sky-300
+text-black shadow-glow hover:scale-[1.03] transition">
+                Send Reset Spell
+            </button>
+
+            <p onclick="show('login')" class="text-center text-xs mt-4 opacity-70 cursor-pointer">
+                Back
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        /* Screens */
+        function show(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+            document.getElementById(id).classList.add('active')
+        }
+
+        /* Password strength */
+        function strength(p) {
+            let s = 0
+            if (p.length > 6) s++
+            if (/[A-Z]/.test(p)) s++
+            if (/[0-9]/.test(p)) s++
+            if (/[^A-Za-z0-9]/.test(p)) s++
+            return s
+        }
+
+        loginPassword.oninput = () => bar(loginPassword.value, strengthFill)
+        registerPassword.oninput = () => bar(registerPassword.value, registerStrength)
+
+        function bar(v, b) {
+            let s = strength(v)
+            b.style.width = `${s * 25}%`
+            b.className = `h-full transition-all ${s < 2 ? 'bg-red-400' : s === 2 ? 'bg-yellow-400' : s === 3 ? 'bg-sky-400' : 'bg-emerald-400'
+                }`
+        }
+
+        /* Submit animation */
+        function submit(btn, text) {
+            btn.disabled = true
+            btn.innerHTML = ''
+            btn.classList.add('loading')
+            setTimeout(() => {
+                btn.classList.remove('loading')
+                btn.innerHTML = text
+                btn.classList.remove('text-black')
+                btn.classList.add('bg-emerald-500', 'text-white')
+            }, 1400)
+        }
+    </script>
+
+</body>
+
+</html>

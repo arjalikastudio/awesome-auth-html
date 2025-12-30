@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Winter Auth — Hyper Realistic</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="style2.css" rel="stylesheet" type="text/css" />
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    boxShadow: {
+                        glow: '0 0 40px rgba(255,200,120,0.25)',
+                        frost: 'inset 0 0 40px rgba(255,255,255,0.25)'
+                    }
+                }
+            }
+        }
+    </script>
+ 
+</head>
+
+<body class="relative min-h-screen overflow-hidden flex items-center justify-center
+bg-gradient-to-br from-[#0a1020] via-[#020617] to-black text-white">
+
+    <!-- Snow -->
+    <div class="snow"></div>
+
+    <!-- Fire vs Ice Particles -->
+    <canvas id="particles"></canvas>
+
+    <!-- Glow -->
+    <div class="absolute -top-32 -left-32 w-[500px] h-[500px] bg-blue-500/20 blur-[140px]"></div>
+    <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-amber-400/20 blur-[140px]"></div>
+
+    <!-- Card -->
+    <div id="card" class="frost-reactive relative z-10 w-full max-w-md
+        bg-gradient-to-br from-white/20 to-white/5
+        backdrop-blur-2xl rounded-3xl p-8
+        border border-white/20 shadow-2xl shadow-black/70">
+
+        <div class="crack"></div>
+
+        <h1 class="text-center text-2xl font-semibold mb-6">❄️ Winter Access</h1>
+
+        <!-- LOGIN -->
+        <div id="login" class="screen active">
+            <input placeholder="Email" class="w-full mb-4 px-4 py-3 rounded-xl bg-black/30 border border-white/10" />
+            <input id="loginPassword" type="password" placeholder="Password"
+                class="w-full mb-3 px-4 py-3 rounded-xl bg-black/30 border border-white/10" />
+            <div class="h-1.5 w-full bg-white/10 rounded mb-5 overflow-hidden">
+                <div id="strengthFill" class="h-full w-0 transition-all"></div>
+            </div>
+            <button onclick="submit(this,'✓ Welcome Back')"
+                class="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-300 to-orange-400 text-black shadow-glow">
+                Enter the Winter
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ================= FROST MOUSE DISTORTION ================= */
+        const card = document.getElementById('card');
+        card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+            card.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+            card.style.transform = `perspective(800px) rotateX(${(r.top + r.height / 2 - e.clientY) / 30}deg)
+                            rotateY(${(e.clientX - r.left - r.width / 2) / 30}deg)`;
+        });
+        card.addEventListener('mouseleave', () => card.style.transform = '');
+
+        /* ================= FIRE vs ICE PARTICLES ================= */
+        const c = document.getElementById('particles'), ctx = c.getContext('2d');
+        function resize() { c.width = innerWidth; c.height = innerHeight }
+        resize(); addEventListener('resize', resize);
+
+        const particles = [];
+        for (let i = 0; i < 120; i++) {
+            particles.push({
+                x: Math.random() * c.width,
+                y: Math.random() * c.height,
+                vx: (Math.random() - .5) * .4,
+                vy: (Math.random() - .5) * .4,
+                fire: Math.random() > .5
+            })
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, c.width, c.height);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > c.width) p.vx *= -1;
+                if (p.y < 0 || p.y > c.height) p.vy *= -1;
+                ctx.fillStyle = p.fire ? 'rgba(255,140,40,.7)' : 'rgba(120,200,255,.7)';
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1.4, 0, Math.PI * 2); ctx.fill();
+            })
+            requestAnimationFrame(loop)
+        }
+        loop();
+
+        /* ================= ORIGINAL LOGIC ================= */
+        function submit(btn, text) {
+            btn.disabled = true; btn.innerHTML = ''; btn.classList.add('loading');
+            setTimeout(() => { btn.innerHTML = text; btn.classList.remove('loading') }, 1400)
+        }
+    </script>
+
+</body>
+
+</html>

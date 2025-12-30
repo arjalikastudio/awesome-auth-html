@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glass Auth UI</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div class="auth-card">
+
+  <!-- LOGIN -->
+  <div class="screen active" id="login">
+    <h2>Welcome Back</h2>
+
+    <div class="input-group">
+      <input type="email" placeholder="Email" required>
+      <label>Email</label>
+    </div>
+
+    <div class="input-group">
+      <input type="password" placeholder="Password" required>
+      <label>Password</label>
+    </div>
+
+    <button class="primary-btn">Login</button>
+
+    <div class="links">
+      <span onclick="showScreen('forgot')">Forgot password?</span>
+      <span onclick="showScreen('register')">Register</span>
+    </div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="screen" id="register">
+    <h2>Create Account</h2>
+
+    <div class="input-group">
+      <input type="text" placeholder="Name" required>
+      <label>Name</label>
+    </div>
+
+    <div class="input-group">
+      <input type="email" placeholder="Email" required>
+      <label>Email</label>
+    </div>
+
+    <div class="input-group">
+      <input type="password" placeholder="Password" required>
+      <label>Password</label>
+    </div>
+
+    <button class="primary-btn">Register</button>
+    <button class="primary-btn secondary-btn" onclick="showScreen('login')">
+      Back to Login
+    </button>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div class="screen" id="forgot">
+    <h2>Reset Password</h2>
+
+    <div class="input-group">
+      <input type="email" placeholder="Email" required>
+      <label>Email</label>
+    </div>
+
+    <button class="primary-btn">Send Reset Link</button>
+
+    <div class="back-link" onclick="showScreen('login')">
+      Back to Login
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+}
+</script>
+
+</body>
+</html>

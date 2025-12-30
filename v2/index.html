@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glass Auth UI – Comfort Theme</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+
+    <style>
+        /* ================= COLOR WAVE ================= */
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25), transparent 45%),
+                radial-gradient(circle at 80% 30%, rgba(168, 85, 247, 0.25), transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.25), transparent 45%);
+            animation: waveMove 26s linear infinite;
+            filter: blur(100px);
+        }
+
+        .dark .wave {
+            background:
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.35), transparent 40%),
+                radial-gradient(circle at 80% 30%, rgba(168, 85, 247, 0.35), transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.35), transparent 40%);
+        }
+
+        @keyframes waveMove {
+            0% {
+                transform: translate(-10%, -10%) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(-25%, -20%) rotate(180deg);
+            }
+
+            100% {
+                transform: translate(-10%, -10%) rotate(360deg);
+            }
+        }
+
+        /* ================= SCREEN ================= */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeUp 0.45s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ================= BUTTON LOADING ================= */
+        .loading::after {
+            content: "";
+            width: 18px;
+            height: 18px;
+            border: 3px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen overflow-hidden flex items-center justify-center
+bg-gradient-to-br from-[#f4f6fb] via-[#eef1f7] to-[#e9f3f0]
+dark:from-gray-900 dark:via-gray-800 dark:to-black
+transition-colors duration-500">
+
+    <!-- Color Wave -->
+    <div class="wave"></div>
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="fixed top-4 right-4 z-20 px-4 py-2 rounded-full
+bg-white/70 dark:bg-white/10
+backdrop-blur text-slate-700 dark:text-white text-sm
+hover:scale-105 transition">
+        🌗 Theme
+    </button>
+
+    <!-- Card -->
+    <div class="relative z-10 w-full max-w-md
+bg-white/60 dark:bg-white/10
+backdrop-blur-xl rounded-2xl shadow-xl
+p-8 border border-white/40 dark:border-white/20
+text-slate-800 dark:text-white">
+
+        <!-- LOGIN -->
+        <div id="login" class="screen active">
+            <h2 class="text-2xl font-semibold text-center mb-6">Welcome Back</h2>
+
+            <input type="email" placeholder="Email" class="w-full mb-4 px-4 py-3 rounded-xl
+bg-white/70 dark:bg-white/20
+outline-none">
+
+            <input id="loginPassword" type="password" placeholder="Password" class="w-full mb-2 px-4 py-3 rounded-xl
+bg-white/70 dark:bg-white/20
+outline-none">
+
+            <div class="h-2 w-full bg-black/10 dark:bg-white/20 rounded mb-4 overflow-hidden">
+                <div id="strengthFill" class="h-full w-0 transition-all"></div>
+            </div>
+
+            <button onclick="handleLogin(this)" class="w-full py-3 rounded-xl
+bg-slate-900 text-white
+dark:bg-white dark:text-gray-800
+font-semibold hover:scale-[1.02] transition">
+                Login
+            </button>
+
+            <div class="flex justify-between text-sm mt-4 opacity-80">
+                <span onclick="showScreen('forgot')" class="cursor-pointer hover:underline">Forgot password?</span>
+                <span onclick="showScreen('register')" class="cursor-pointer hover:underline">Register</span>
+            </div>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="register" class="screen">
+            <h2 class="text-2xl font-semibold text-center mb-6">Create Account</h2>
+
+            <input type="text" placeholder="Name"
+                class="w-full mb-4 px-4 py-3 rounded-xl bg-white/70 dark:bg-white/20 outline-none">
+
+            <input type="email" placeholder="Email"
+                class="w-full mb-4 px-4 py-3 rounded-xl bg-white/70 dark:bg-white/20 outline-none">
+
+            <input id="registerPassword" type="password" placeholder="Password"
+                class="w-full mb-2 px-4 py-3 rounded-xl bg-white/70 dark:bg-white/20 outline-none">
+
+            <div class="h-2 w-full bg-black/10 dark:bg-white/20 rounded mb-4 overflow-hidden">
+                <div id="registerStrength" class="h-full w-0 transition-all"></div>
+            </div>
+
+            <button onclick="handleRegister(this)"
+                class="w-full py-3 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-gray-800 font-semibold hover:scale-[1.02] transition">
+                Register
+            </button>
+
+            <p onclick="showScreen('login')" class="text-center text-sm mt-4 cursor-pointer hover:underline">
+                Back to Login
+            </p>
+        </div>
+
+        <!-- FORGOT -->
+        <div id="forgot" class="screen">
+            <h2 class="text-2xl font-semibold text-center mb-6">Reset Password</h2>
+
+            <input type="email" placeholder="Email"
+                class="w-full mb-4 px-4 py-3 rounded-xl bg-white/70 dark:bg-white/20 outline-none">
+
+            <button onclick="handleForgot(this)"
+                class="w-full py-3 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-gray-800 font-semibold hover:scale-[1.02] transition">
+                Send Reset Link
+            </button>
+
+            <p onclick="showScreen('login')" class="text-center text-sm mt-4 cursor-pointer hover:underline">
+                Back to Login
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        /* Screen switch */
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+            document.getElementById(id).classList.add('active')
+        }
+
+        /* Theme toggle */
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark')
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+        }
+        if (localStorage.theme === 'light') document.documentElement.classList.remove('dark')
+
+        /* Password strength */
+        function strength(pw) {
+            let s = 0
+            if (pw.length > 5) s++
+            if (/[A-Z]/.test(pw)) s++
+            if (/[0-9]/.test(pw)) s++
+            if (/[^A-Za-z0-9]/.test(pw)) s++
+            return s
+        }
+
+        loginPassword.oninput = () => updateStrength(loginPassword.value, strengthFill)
+        registerPassword.oninput = () => updateStrength(registerPassword.value, registerStrength)
+
+        function updateStrength(value, bar) {
+            const s = strength(value)
+            bar.style.width = `${s * 25}%`
+            bar.className = `h-full transition-all ${s <= 1 ? 'bg-red-400' :
+                    s === 2 ? 'bg-yellow-400' :
+                        s === 3 ? 'bg-blue-400' :
+                            'bg-green-500'
+                }`
+        }
+
+        /* Button animations */
+        function fakeSubmit(btn, text) {
+            btn.disabled = true
+            btn.innerHTML = ''
+            btn.classList.add('loading')
+            setTimeout(() => {
+                btn.classList.remove('loading')
+                btn.innerHTML = text
+                btn.classList.add('bg-emerald-500', 'text-white')
+            }, 1200)
+        }
+
+        function handleLogin(btn) { fakeSubmit(btn, '✓ Logged In') }
+        function handleRegister(btn) { fakeSubmit(btn, '✓ Account Created') }
+        function handleForgot(btn) { fakeSubmit(btn, '✓ Email Sent') }
+    </script>
+
+</body>
+
+</html>
