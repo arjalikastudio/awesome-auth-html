@@ -35,3 +35,41 @@ This pack is designed to help developers and designers quickly implement beautif
 - Vanilla JavaScript (minimal usage)
 
 
+## 🚀 Getting Started
+
+```bash
+git clone  https://github.com/arjalikastudio/awesome-auth-html.git
+cd awesome-auth-html
+open index.html inside folder
+```
+
+
+---
+## 📸 Screenshots Preview
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="preview-1.png" width="100%" alt="Home – Hero Slider & Product Grid"/><br/>
+      <sub>Preview 1</sub>
+    </td>
+    <td align="center">
+      <img src="preview-2.png" width="100%" alt="Home – Dark Mode"/><br/>
+      <sub>Preview 2</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="preview-3.png" width="100%" alt="Order History"/><br/>
+      <sub>Preview 3</sub>
+    </td>
+    <td align="center">
+      <img src="preview-4.png" width="100%" alt="Wishlist"/><br/>
+      <sub>Preview 4</sub>
+    </td>
+  </tr>
+   
+</table>
+
+
+
